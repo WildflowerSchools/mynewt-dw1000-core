@@ -110,8 +110,12 @@ nrng_encode(dw1000_nrng_instance_t * nrng, uint8_t seq_num, uint16_t base){
                 float range = dw1000_rng_tof_to_meters(dw1000_nrng_twr_to_tof_frames(nrng->parent, frame, frame));
                 JSON_VALUE_UINT(&value, *(uint32_t *)&range);
                 rc |= json_encode_array_value(&encoder, &value);
+                nrng->ranges[i] =  *(uint32_t *)&range;
                 if (i%64==0) _json_fflush();
             }
+        }
+        else {
+            nrng->ranges[i] =  (uint32_t)0xBAAAAAD1;
         }
     }
     rc |= json_encode_array_finish(&encoder);
