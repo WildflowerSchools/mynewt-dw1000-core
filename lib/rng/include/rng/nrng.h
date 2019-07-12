@@ -120,6 +120,7 @@ typedef struct _dw1000_nrng_instance_t{
     dw1000_rng_control_t control;
     dw1000_rng_config_t config;
     uint16_t idx;
+    uint64_t uptime_last_measurement;
     uint32_t ranges[100];
     nrng_frame_t *frames[][FRAMES_PER_RANGE];
 }dw1000_nrng_instance_t;
