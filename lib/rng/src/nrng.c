@@ -511,6 +511,7 @@ complete_ev_cb(struct os_event *ev) {
 
     dw1000_dev_instance_t * inst = (dw1000_dev_instance_t *)ev->ev_arg;
     nrng_encode(inst->nrng, inst->nrng->seq_num, inst->nrng->idx);
+    inst->nrng->uptime_last_measurement = os_get_uptime_usec();
 }
 
 struct os_callout nrng_callout;
