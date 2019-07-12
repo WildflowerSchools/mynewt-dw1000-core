@@ -443,7 +443,7 @@ dw1000_nrng_request(dw1000_dev_instance_t * inst, uint16_t dst_address, dw1000_r
 float
 dw1000_nrng_twr_to_tof_frames(struct _dw1000_dev_instance_t * inst, nrng_frame_t *first_frame, nrng_frame_t *final_frame){
     float ToF = 0;
-    uint64_t T1R, T1r, T2R, T2r;
+    int64_t T1R, T1r, T2R, T2r;
     int64_t nom,denom;
     if(final_frame != NULL){
         switch(final_frame->code){
@@ -462,12 +462,12 @@ dw1000_nrng_twr_to_tof_frames(struct _dw1000_dev_instance_t * inst, nrng_frame_t
             case DWT_SS_TWR_NRNG ... DWT_SS_TWR_NRNG_EXT_FINAL:{
                 assert(first_frame != NULL);
 #if MYNEWT_VAL(WCS_ENABLED)
-                ToF = ((first_frame->response_timestamp - first_frame->request_timestamp)
-                    -  (first_frame->transmission_timestamp - first_frame->reception_timestamp))/2.0f;
+                ToF = ((int64_t)(first_frame->response_timestamp - first_frame->request_timestamp)
+                    -  (int64_t)(first_frame->transmission_timestamp - first_frame->reception_timestamp))/2.0f;
 #else
                 float skew = dw1000_calc_clock_offset_ratio(inst, first_frame->carrier_integrator);
-                ToF = ((first_frame->response_timestamp - first_frame->request_timestamp)
-                    -  (first_frame->transmission_timestamp - first_frame->reception_timestamp) * (1 - skew))/2.0f;
+                ToF = ((int64_t)(first_frame->response_timestamp - first_frame->request_timestamp)
+                    -  (int64_t)(first_frame->transmission_timestamp - first_frame->reception_timestamp) * (1 - skew))/2.0f;
 #endif
                 break;
             }
